@@ -51,8 +51,18 @@ export const login = async (req: Request, res: Response) => {
 
   // Générer un token JWT (pour l'authentification)
   const token = jwt.sign({ userId: user.id }, process.env.JWT_ACCESS_SECRET as Secret, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRATION as string,
+    expiresIn: process.env.JWT_ACCESS_EXPIRATION as string,
   })
 
   res.json({ message: 'Connexion réussie', user, token })
+}
+
+export const me = async (req: Request, res: Response) => {
+  res.json(
+    await prisma.user.findUnique({
+      where: {
+        id: req.payload?.userId,
+      },
+    }),
+  )
 }
