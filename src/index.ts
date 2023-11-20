@@ -1,12 +1,15 @@
 import express, { Request, Response } from 'express'
 import authRoutes from './routes/authRoutes'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import dotenv from 'dotenv'
 
 dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 3000
+
+app.use(cors())
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
