@@ -12,7 +12,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
   // Verify the JWT token
   jwt.verify(token, process.env.JWT_ACCESS_SECRET as Secret, (err, decoded) => {
     if (err) {
-      res.status(401).json({ message: 'Error. Invalid token' })
+      return res.status(401).json({ message: 'Error. Invalid token' })
     }
 
     // Attach decoded token to request object
