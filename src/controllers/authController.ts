@@ -15,7 +15,7 @@ export const signup = async (req: Request, res: Response) => {
   })
 
   if (existingUser) {
-    return res.status(400).json({ error: "L'utilisateur existe déjà" })
+    return res.status(400).json({ message: "L'utilisateur existe déjà" })
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -40,13 +40,13 @@ export const login = async (req: Request, res: Response) => {
   })
 
   if (!user) {
-    return res.status(401).json({ error: 'Utilisateur non trouvé' })
+    return res.status(401).json({ message: 'Utilisateur ou mot de passe incorrect.' })
   }
 
   const passwordMatch = await bcrypt.compare(password, user.password)
 
   if (!passwordMatch) {
-    return res.status(401).json({ error: 'Mot de passe incorrect' })
+    return res.status(401).json({ message: 'Utilisateur ou mot de passe incorrect.' })
   }
 
   // Générer un token JWT (pour l'authentification)
