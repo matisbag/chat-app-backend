@@ -3,9 +3,7 @@
 ## Setup
 
 ```bash
-cp .env.example .env # to configure
+cp .env.example .env # .env to configure
 
-npm install
-
-npm start
+deno task dev
 ```
