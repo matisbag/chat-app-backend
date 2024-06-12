@@ -9,7 +9,7 @@ export default class Message extends BaseModel {
   declare id: number
 
   @column()
-  declare conversationId: number
+  declare conversationId: string
 
   @belongsTo(() => Conversation)
   declare conversation: BelongsTo<typeof Conversation>
