@@ -1,17 +1,17 @@
 import { DateTime } from 'luxon'
+import { randomUUID } from 'node:crypto'
 import { BaseModel, beforeCreate, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import User from '#models/user'
 import Message from '#models/message'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
-import { v4 as uuid } from 'uuid'
 
 export default class Conversation extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
   @beforeCreate()
-  static assignAvatar(conversation: Conversation) {
-    conversation.id = uuid() as string
+  static assignUuid(conversation: Conversation) {
+    conversation.id = randomUUID()
   }
 
   @column()
