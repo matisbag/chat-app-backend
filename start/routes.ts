@@ -27,4 +27,4 @@ router
   })
   .prefix('auth')
 
-router.get('conversations', [ConversationsController, 'index'])
+router.get('conversations', [ConversationsController, 'index']).use(middleware.auth())

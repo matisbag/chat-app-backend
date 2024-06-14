@@ -1,9 +1,17 @@
 import { DateTime } from 'luxon'
 import { randomUUID } from 'node:crypto'
-import { BaseModel, beforeCreate, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeCreate,
+  column,
+  computed,
+  hasMany,
+  hasOne,
+  manyToMany,
+} from '@adonisjs/lucid/orm'
 import User from '#models/user'
 import Message from '#models/message'
-import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 
 export default class Conversation extends BaseModel {
   @column({ isPrimary: true })
@@ -14,7 +22,9 @@ export default class Conversation extends BaseModel {
     conversation.id = randomUUID()
   }
 
-  @column()
+  @column({
+    serialize: (value, _, model) => value || 'Conversation ' + model.id,
+  })
   declare title: string | null
 
   @column()
@@ -31,4 +41,11 @@ export default class Conversation extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasOne(() => Message, {
+    onQuery: (query) => {
+      query.orderBy('created_at', 'desc')
+    },
+  })
+  declare lastMessage: HasOne<typeof Message>
 }

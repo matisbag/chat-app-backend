@@ -5,8 +5,10 @@ export default class ConversationsController {
   /**
    * Display a list of resource
    */
-  async index({}: HttpContext) {
-    return await Conversation.all()
+  async index({ auth }: HttpContext) {
+    return await auth.user?.related('conversations').query().preload('lastMessage')
+    // .join('messages', 'conversations.id', 'messages.conversation_id')
+    // .orderBy('messages.id')
   }
 
   /**
