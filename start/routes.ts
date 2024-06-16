@@ -29,6 +29,7 @@ router
   .prefix('auth')
 
 router.get('conversations', [ConversationsController, 'index']).use(middleware.auth())
+router.post('conversations', [ConversationsController, 'store']).use(middleware.auth())
 
 router.get('/conversations/:id/messages', [MessagesController, 'index']).use(middleware.auth())
 router.post('/conversations/:id/messages', [MessagesController, 'store']).use(middleware.auth())
