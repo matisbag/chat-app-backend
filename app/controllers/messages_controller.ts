@@ -1,5 +1,6 @@
 import Conversation from '#models/conversation'
 import MessagePolicy from '#policies/message_policy'
+import { createMessageValidator } from '#validators/message'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class MessagesController {
@@ -23,7 +24,20 @@ export default class MessagesController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request }: HttpContext) {}
+  async store({ params, request, auth, bouncer }: HttpContext) {
+    const conversation = await Conversation.findOrFail(params.id)
+
+    await bouncer.with(MessagePolicy).authorize('create', conversation)
+
+    const payload = await request.validateUsing(createMessageValidator)
+
+    const message = await conversation.related('messages').create({
+      ...payload,
+      userId: auth.user!.id,
+    })
+
+    return message
+  }
 
   /**
    * Show individual record

@@ -31,3 +31,4 @@ router
 router.get('conversations', [ConversationsController, 'index']).use(middleware.auth())
 
 router.get('/conversations/:id/messages', [MessagesController, 'index']).use(middleware.auth())
+router.post('/conversations/:id/messages', [MessagesController, 'store']).use(middleware.auth())
