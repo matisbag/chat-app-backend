@@ -12,14 +12,13 @@ export default class ConversationsController {
       .raw(
         `(SELECT MAX(messages.created_at) FROM messages WHERE messages.conversation_id = conversations.id)`
       )
-      .wrap('(', ') as last_message_created_at')
+      .wrap('(', ')')
 
     return await auth.user
       ?.related('conversations')
       .query()
-      .select('*', lastMessageQuery)
       .preload('lastMessage')
-      .orderBy('last_message_created_at', 'desc')
+      .orderBy(lastMessageQuery, 'desc')
   }
 
   /**
