@@ -1,13 +1,25 @@
 import Conversation from '#models/conversation'
 import { createConversationValidator } from '#validators/conversation'
 import type { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 
 export default class ConversationsController {
   /**
    * Display a list of resource
    */
   async index({ auth }: HttpContext) {
-    return await auth.user?.related('conversations').query().preload('lastMessage')
+    const lastMessageQuery = db
+      .raw(
+        `(SELECT MAX(messages.created_at) FROM messages WHERE messages.conversation_id = conversations.id)`
+      )
+      .wrap('(', ') as last_message_created_at')
+
+    return await auth.user
+      ?.related('conversations')
+      .query()
+      .select('*', lastMessageQuery)
+      .preload('lastMessage')
+      .orderBy('last_message_created_at', 'desc')
   }
 
   /**
