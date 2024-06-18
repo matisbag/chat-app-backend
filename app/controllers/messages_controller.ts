@@ -5,7 +5,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class MessagesController {
   /**
-   * Display a list of resource
+   * List all messages
    */
   async index({ params, bouncer }: HttpContext) {
     const conversation = await Conversation.findOrFail(params.id)

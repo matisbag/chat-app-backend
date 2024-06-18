@@ -10,6 +10,7 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 const AuthController = () => import('#controllers/auth_controller')
+const UsersController = () => import('#controllers/users_controller')
 const ConversationsController = () => import('#controllers/conversations_controller')
 const MessagesController = () => import('#controllers/messages_controller')
 
@@ -27,6 +28,8 @@ router
     router.post('logout', [AuthController, 'logout']).use(middleware.auth())
   })
   .prefix('auth')
+
+router.get('users', [UsersController, 'index']).use(middleware.auth())
 
 router.get('conversations', [ConversationsController, 'index']).use(middleware.auth())
 router.post('conversations', [ConversationsController, 'store']).use(middleware.auth())

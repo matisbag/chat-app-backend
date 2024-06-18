@@ -5,7 +5,7 @@ import db from '@adonisjs/lucid/services/db'
 
 export default class ConversationsController {
   /**
-   * Display a list of resource
+   * List all conversations
    */
   async index({ auth }: HttpContext) {
     const lastMessageQuery = db
