@@ -28,10 +28,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @manyToMany(() => Conversation)
   declare conversations: ManyToMany<typeof Conversation>
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
