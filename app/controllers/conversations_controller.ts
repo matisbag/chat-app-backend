@@ -2,6 +2,7 @@ import Conversation from '#models/conversation'
 import { createConversationValidator, updateConversationValidator } from '#validators/conversation'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
+import Ws from '#services/ws_service'
 
 export default class ConversationsController {
   /**
@@ -40,6 +41,13 @@ export default class ConversationsController {
 
     // attach users to the conversation
     await conversation.related('users').attach([auth.user!.id, ...payload.userIds])
+
+    // Emit the newConversation event to the relevant users
+    payload.userIds.forEach((userId) => {
+      Ws.io?.to(`user_${userId}`).emit('newConversation', conversation)
+    })
+
+    Ws.io?.to(`user_${auth.user!.id}`).emit('newConversation', conversation)
 
     await conversation.load('users')
 

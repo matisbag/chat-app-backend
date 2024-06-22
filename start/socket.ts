@@ -7,6 +7,9 @@ app.ready(() => {
   io?.on('connection', (socket) => {
     // console.log('New connection:', socket.id)
 
+    const userId = socket.handshake.query.userId
+    socket.join(`user_${userId}`)
+
     socket.on('joinConversation', (conversationId) => {
       // console.log('Joining conversation:', conversationId)
       socket.join(`conversation_${conversationId}`)
